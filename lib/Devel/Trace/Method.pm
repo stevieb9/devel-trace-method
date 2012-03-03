@@ -17,16 +17,21 @@ our %EXPORT_TAGS = (
                         )
                     ],
                 );
-our @EXPORT_OK = ( @{ $EXPORT_TAGS{ all } } ) ;
+our @EXPORT_OK = (  @{ $EXPORT_TAGS{ all } },
+                ) ;
+
 
 my @track_functions = qw(
                         CODEFLOW
                         STACK_TRACING
                     );
+sub _track_functions { return @track_functions; }
+
 my @fetch_functions = qw(
                         codeflow
                         stacktrace
                     );
+sub _fetch_functions { return @fetch_functions; }
 
 { # create the tracking/retrieving functions  
 
@@ -180,9 +185,8 @@ This module takes any object, and injects into it the ability to
 have it track itself through all of its progress. As of now, it
 creates an ordered stack trace, and a list of ordered method calls.
 
-Note that I do have a rendering engine for both CLI and HTML,
-for the output, but I have not hooked them in yet.
-
+NOTE: This is alpha software, and *will* go through API changes
+in the early stages.
 
 
 =head1 FUNCTIONS

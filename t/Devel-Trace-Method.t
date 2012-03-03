@@ -3,7 +3,6 @@ use warnings;
 use Data::Dumper;
 
 use Test::More qw( no_plan );
-BEGIN { use_ok('Devel::Trace::Method') };
 
 # dummy package for testing
 
@@ -36,7 +35,7 @@ use Devel::Trace::Method qw( :all );
 {
     my $obj = Class::new(1);
     my $ret = track_object_methods( $obj );
-    my $obj = $ret;
+    $obj = $ret;
 
     ok ( ref $ret eq 'Class', "track_object_method() returns an object" );
 
@@ -90,5 +89,23 @@ use Devel::Trace::Method qw( :all );
         }
     }
 
-} 
+    { # fetch_trace with param
 
+        my @fetch_functions = Devel::Trace::Method::_fetch_functions();
+        ok ( scalar @fetch_functions == 2, "we're testing all of the fetch functions" );
+       
+        # stacktrace()
+
+        my $stacktrace = fetch_trace( $obj, 'stacktrace' );
+        ok ( ref $stacktrace eq 'ARRAY', "fetch_trace() with param 'stacktrace' returns an aref" );
+        ok ( ref $stacktrace->[0] eq 'HASH', "the aref returned from fetch_trace( 'stacktrace' ) contains hrefs" );
+        my $key_count = keys ( %{ $stacktrace->[0] } );
+        is ( $key_count, 5, "each href in stacktrace() return aref contains 5 entries" );
+
+        # codeflow
+
+        my $codeflow = fetch_trace( $obj, 'codeflow' );
+        ok ( ref $codeflow eq 'ARRAY', "fetch_trace() with param 'codeflow' returns an aref" );
+        
+    } 
+}

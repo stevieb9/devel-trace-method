@@ -4,6 +4,8 @@ Revision history for Perl extension Devel::Method::Matrix.
     - more POD cleanup
     - added test cases (still working on it)
     - fixed a couple of return values
+    - changed the return values of the fetch_trace()
+      function
 
 0.04  2012-02-03
     - cleaned up broken tabs
