@@ -3,7 +3,7 @@ package Devel::Trace::Method;
 use strict;
 use warnings;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use Exporter 'import';
 
@@ -17,9 +17,7 @@ our %EXPORT_TAGS = (
                         )
                     ],
                 );
-our @EXPORT_OK = (  @{ $EXPORT_TAGS{ all } },
-                ) ;
-
+our @EXPORT_OK = (  @{ $EXPORT_TAGS{ all } }, ) ;
 
 my @track_functions = qw(
                         CODEFLOW
@@ -38,16 +36,18 @@ sub _fetch_functions { return @fetch_functions; }
     my $debugging_functions;
 
     { # CODEFLOW
+
         my $codeflow_storage;
         my $call_count = 0;
 
         sub CODEFLOW {
             my $self = shift;
-            my $skip = @_;
-            return $codeflow_storage if $skip;
+            
+            return $codeflow_storage if @_;
 
-            $codeflow_storage->{$call_count} = (caller(2))[3];
             $call_count++;
+            
+            $codeflow_storage->{$call_count} = (caller(2))[3];
         }
         $debugging_functions->{CODEFLOW} = \&CODEFLOW;
 
@@ -56,9 +56,11 @@ sub _fetch_functions { return @fetch_functions; }
             my $self = shift;
 
             my @sorted_codeflow;
+            
             foreach my $key (sort { ($a) <=> ($b) } keys %$codeflow_storage) {
                 push @sorted_codeflow, "$key => $codeflow_storage->{$key}";
             }
+        
             return \@sorted_codeflow;
         }
         $debugging_functions->{codeflow} = \&codeflow;
@@ -72,8 +74,7 @@ sub _fetch_functions { return @fetch_functions; }
 
             my $self = shift;
 
-            my $skip = @_;
-            return @stack if $skip;
+            return @stack if @_;
             
             my $caller = (caller(3))[3] ? (caller(3))[3] : 0;
             push @stack, {
@@ -86,20 +87,12 @@ sub _fetch_functions { return @fetch_functions; }
         }
         $debugging_functions->{STACK_TRACING} = \&STACK_TRACING;
 
-        sub stacktrace {
-            my $self = shift;
-            return \@stack;
-        }
+        sub stacktrace { return \@stack; }
+        
         $debugging_functions->{stacktrace} = \&stacktrace;
     }
 
-    { # Return the debugging_functions dispatch table
-
-        sub DEBUGGING_FUNCTIONS {
-            my $self = shift;
-            return $debugging_functions;
-        }
-    }
+    sub DEBUGGING_FUNCTIONS { return $debugging_functions; }
 }
 
 sub track_object_methods {
