@@ -7,10 +7,10 @@ Devel::Trace::Method - Track how your object methods interact
 =head1 SYNOPSIS
 
   use Devel::Trace::Method qw( 
-								track_object_methods	
-								track_method
-								fetch_trace
-							);
+                                track_object_methods    
+                                track_method
+                                fetch_trace
+                            );
 
   # configure your object for method tracking
  
@@ -22,8 +22,8 @@ Devel::Trace::Method - Track how your object methods interact
   track_method( $self );
   
   # retrieve the data  
-	
-  my @all 		 = fetch_trace( $object ); # or $self
+    
+  my @all        = fetch_trace( $object ); # or $self
   my @codeflow   = fetch_trace( $obj, 'codeflow' );
   my @stacktrace = fetch_trace( $obj, 'stacktrace' );
 
@@ -75,11 +75,11 @@ methods, or by a program using one of your methods.
 Takes an object as the first mandatory parameter. The second
 optional string parameter states which data you'd like returned:
 
-	'codeflow'   -returns an array containing the list of methods
-				  called, in the order they were called.
+    'codeflow'   -returns an array containing the list of methods
+                  called, in the order they were called.
 
-	'stacktrace' -returns an array of hash references, where
-				  each hash ref contains details of each method call
+    'stacktrace' -returns an array of hash references, where
+                  each hash ref contains details of each method call
 
 Given no optional parameters, the return is an array reference
 that contains an array reference for all the above types.

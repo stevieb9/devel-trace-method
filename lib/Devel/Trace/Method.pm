@@ -3,30 +3,30 @@ package Devel::Trace::Method;
 use strict;
 use warnings;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use Exporter 'import';
 
 our @ISA = qw( Exporter );
 
 our %EXPORT_TAGS = ( 
-				all => [ qw(
-						track_object_methods	
-						track_method
-						fetch_trace
-						)
-					],
-				);
+                all => [ qw(
+                        track_object_methods    
+                        track_method
+                        fetch_trace
+                        )
+                    ],
+                );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{ all } } ) ;
 
 my @track_functions = qw(
-						CODEFLOW
-						STACK_TRACING
-					);
+                        CODEFLOW
+                        STACK_TRACING
+                    );
 my @fetch_functions = qw(
-						codeflow
-						stacktrace
-					);
+                        codeflow
+                        stacktrace
+                    );
 
 { # create the tracking/retrieving functions  
 
@@ -56,7 +56,7 @@ my @fetch_functions = qw(
             }
             return @sorted_codeflow;
         }
-		$debugging_functions->{codeflow} = \&codeflow;
+        $debugging_functions->{codeflow} = \&codeflow;
     }
 
     { # STACK_TRACING
@@ -70,7 +70,7 @@ my @fetch_functions = qw(
             my $skip = @_;
             return @stack if $skip;
             
-			my $caller = (caller(3))[3] ? (caller(3))[3] : 0;
+            my $caller = (caller(3))[3] ? (caller(3))[3] : 0;
             push @stack, {
                     caller   => $caller,
                     package  => (caller(1))[0],
@@ -85,7 +85,7 @@ my @fetch_functions = qw(
             my $self = shift;
             return @stack;
         }
-		$debugging_functions->{stacktrace} = \&stacktrace;
+        $debugging_functions->{stacktrace} = \&stacktrace;
     }
 
     { # Return the debugging_functions dispatch table
@@ -99,42 +99,42 @@ my @fetch_functions = qw(
 
 sub track_object_methods {
 
-	my $self = shift;
+    my $self = shift;
 
-	for my $function ( @track_functions ){
-		$self->{ DTM_functions }{ track }{ $function } 
-			= DEBUGGING_FUNCTIONS()->{ $function };
-	}
-	for my $function ( @fetch_functions ){
-		$self->{ DTM_functions }{ fetch }{ $function }
-			= DEBUGGING_FUNCTIONS()->{ $function };
-	}
+    for my $function ( @track_functions ){
+        $self->{ DTM_functions }{ track }{ $function } 
+            = DEBUGGING_FUNCTIONS()->{ $function };
+    }
+    for my $function ( @fetch_functions ){
+        $self->{ DTM_functions }{ fetch }{ $function }
+            = DEBUGGING_FUNCTIONS()->{ $function };
+    }
 
-	return $self;	
+    return $self;   
 }
 
 sub track_method {
 
-	my $self = shift;
+    my $self = shift;
 
-	for my $track_function ( @track_functions ){
-		$self->{ DTM_functions }{ track }{ $track_function }();
-	}
+    for my $track_function ( @track_functions ){
+        $self->{ DTM_functions }{ track }{ $track_function }();
+    }
 }
 
 sub fetch_trace {
-	
-	my $self = shift;
-	my $param = shift;
+    
+    my $self = shift;
+    my $param = shift;
 
-	if ( ! $param ){
-		my @return;
-		for my $data ( @fetch_functions ){
-			push @return, \$self->{ DTM_functions }{ fetch }{ $data }();
-		}
-		return @return;
-	}	
-	return $self->{ DTM_functions }{ fetch }{ $param }();
+    if ( ! $param ){
+        my @return;
+        for my $data ( @fetch_functions ){
+            push @return, \$self->{ DTM_functions }{ fetch }{ $data }();
+        }
+        return @return;
+    }   
+    return $self->{ DTM_functions }{ fetch }{ $param }();
 }
 
 1;
@@ -151,10 +151,10 @@ Devel::Trace::Method - Track how your object methods interact
 =head1 SYNOPSIS
 
   use Devel::Trace::Method qw( 
-								track_object_methods	
-								track_method
-								fetch_trace
-							);
+                                track_object_methods    
+                                track_method
+                                fetch_trace
+                            );
 
   # configure your object for method tracking
  
@@ -166,8 +166,8 @@ Devel::Trace::Method - Track how your object methods interact
   track_method( $self );
   
   # retrieve the data  
-	
-  my @all 		 = fetch_trace( $object ); # or $self
+    
+  my @all        = fetch_trace( $object ); # or $self
   my @codeflow   = fetch_trace( $obj, 'codeflow' );
   my @stacktrace = fetch_trace( $obj, 'stacktrace' );
 
@@ -219,11 +219,11 @@ methods, or by a program using one of your methods.
 Takes an object as the first mandatory parameter. The second
 optional string parameter states which data you'd like returned:
 
-	'codeflow'   -returns an array containing the list of methods
-				  called, in the order they were called.
+    'codeflow'   -returns an array containing the list of methods
+                  called, in the order they were called.
 
-	'stacktrace' -returns an array of hash references, where
-				  each hash ref contains details of each method call
+    'stacktrace' -returns an array of hash references, where
+                  each hash ref contains details of each method call
 
 Given no optional parameters, the return is an array reference
 that contains an array reference for all the above types.

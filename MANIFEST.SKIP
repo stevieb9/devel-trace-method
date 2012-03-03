@@ -1,0 +1,6 @@
+^\.hg/
+^\.hgignore$
+^MANIFEST\.SKIP$
+^examples/
+~$
+tar.gz$
