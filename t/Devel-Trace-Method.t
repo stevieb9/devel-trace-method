@@ -13,7 +13,7 @@ use Devel::Trace::Method qw( :all );
 
 sub new { 
     my $self = bless {}, 'Class'; 
-    trace_object_methods( $self ) unless shift;
+    track_object_methods( $self ) unless shift;
     return $self;
 }
 sub now { 
@@ -36,7 +36,7 @@ use Devel::Trace::Method qw( :all );
     my $obj = Class::new(1);
     my $ret = track_object_methods( $obj );
 
-    ok ( $ret == 0, "track_object_method() returns 0 upon success" );
+    ok ( ref $ret eq 'Class', "track_object_method() returns an object" );
 
     ok ( exists $obj->{ DTM_functions }, "object is populated with our container" );
     ok ( exists $obj->{ DTM_functions }{ track }, "container has track" );
@@ -62,8 +62,5 @@ use Devel::Trace::Method qw( :all );
         }
         ok ( $sub_count == 2, "there are only two 'fetch' subs" );
     }
-
-    print Dumper $obj;
-
 
 }

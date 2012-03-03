@@ -1,5 +1,10 @@
 Revision history for Perl extension Devel::Method::Matrix.
 
+0.05  2012-02-03
+    - more POD cleanup
+    - added test cases (still working on it)
+    - fixed a couple of return values
+
 0.04  2012-02-03
     - cleaned up broken tabs
     - fixed POD blocks of verbatim code

@@ -3,7 +3,7 @@ package Devel::Trace::Method;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use Exporter 'import';
 
@@ -110,7 +110,7 @@ sub track_object_methods {
             = DEBUGGING_FUNCTIONS()->{ $function };
     }
 
-    return 0;   
+    return $self;   
 }
 
 sub track_method {
@@ -120,6 +120,8 @@ sub track_method {
     for my $track_function ( @track_functions ){
         $self->{ DTM_functions }{ track }{ $track_function }();
     }
+
+    return 0;
 }
 
 sub fetch_trace {
