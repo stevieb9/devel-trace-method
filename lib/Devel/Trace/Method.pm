@@ -75,8 +75,9 @@ sub _fetch_functions { return @fetch_functions; }
             my $self = shift;
 
             return @stack if @_;
+           
+            my $caller = (caller(3))[3] || 0; 
             
-            my $caller = (caller(3))[3] ? (caller(3))[3] : 0;
             push @stack, {
                     caller   => $caller,
                     package  => (caller(1))[0],
