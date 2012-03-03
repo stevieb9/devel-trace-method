@@ -261,8 +261,8 @@ an array reference for each of the available data.
     print Dumper $codeflow;
 
     $VAR1 = [
-          '0 => Dude::say_hi',
-          '1 => Dude::say_bye'
+          '1 => Dude::say_hi',
+          '2 => Dude::say_bye'
         ];
 
 
