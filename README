@@ -1,6 +1,6 @@
 =head1 NAME
 
-Devel::Trace::Method - Track how your object methods interact
+Devel::Trace::Method - Follow the flow of your object's method calls 
 
 
 
@@ -12,31 +12,31 @@ Devel::Trace::Method - Track how your object methods interact
                                 fetch_trace
                             );
 
-  # configure your object for method tracking
+  # configure your object for method tracking within your
+  # new() method
  
-  track_object_methods( $self ); # in your new() method
+  track_object_methods( $self ); 
 
-  # in each method call within your object, inform the method
-  # that you want it tracked
+  # add the tracking call within each of your methods
 
   track_method( $self );
   
   # retrieve the data  
     
-  my @all        = fetch_trace( $object ); # or $self
-  my @codeflow   = fetch_trace( $obj, 'codeflow' );
-  my @stacktrace = fetch_trace( $obj, 'stacktrace' );
+  my $all        = fetch_trace( $obj ); # or $self
+  my $codeflow   = fetch_trace( $obj, 'codeflow' );
+  my $stacktrace = fetch_trace( $obj, 'stacktrace' );
 
 
 =head1 DESCRIPTION
 
 This module takes any object, and injects into it the ability to
-have it track itself through all of its progress. As of now, it
-creates an ordered stack trace, and a list of ordered method calls.
+have it track its own method calls, and store this information for
+later retrieval. It creates and stores an ordered stack trace, 
+and a list of ordered method calls.
 
-Note that I do have a rendering engine for both CLI and HTML,
-for the output, but I have not hooked them in yet.
-
+NOTE: This is alpha software, and *will* go through API changes
+in the early stages.
 
 
 =head1 FUNCTIONS
@@ -75,14 +75,14 @@ methods, or by a program using one of your methods.
 Takes an object as the first mandatory parameter. The second
 optional string parameter states which data you'd like returned:
 
-    'codeflow'   -returns an array containing the list of methods
+    'codeflow'   -returns an arrayref containing the list of methods
                   called, in the order they were called.
 
-    'stacktrace' -returns an array of hash references, where
+    'stacktrace' -returns an arrayref of hash references, where
                   each hash ref contains details of each method call
 
-Given no optional parameters, the return is an array reference
-that contains an array reference for all the above types.
+Given no optional parameters, returns a hash reference that contains 
+an array reference for each of the available data.
 
 
 
@@ -90,29 +90,30 @@ that contains an array reference for all the above types.
 
     # print the stack trace
 
-    my @stack = fetch_trace( $obj, 'stacktrace' );
-    print Dumper \@stack;
+    my $stack = fetch_trace( $obj, 'stacktrace' );
+    print Dumper $stack;
 
     $VAR1 = [
           {
+            'caller' => 0,
             'sub' => 'Dude::say_hi',
             'filename' => './dude.pl',
-            'caller' => 0,
             'line' => 26,
             'package' => 'Dude'
           },
           {
+            'caller' => 'Dude::say_hi',
             'sub' => 'Dude::say_bye',
             'filename' => './dude.pl',
-            'caller' => 'Dude::say_hi',
             'line' => 46,
             'package' => 'Dude'
           }
         ];
 
     # print the code flow
-    my @codeflow = fetch_trace( $obj, 'codeflow' );
-    print Dumper \@codeflow;
+
+    my $codeflow = fetch_trace( $obj, 'codeflow' );
+    print Dumper $codeflow;
 
     $VAR1 = [
           '0 => Dude::say_hi',
