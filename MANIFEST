@@ -1,0 +1,7 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Devel-Trace-Method.t
+lib/Devel/Trace/Method.pm
+TODO

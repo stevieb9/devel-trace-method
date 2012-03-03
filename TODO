@@ -1,0 +1,4 @@
+- auto load trace_method() into all class methods
+- create a disable trace method
+- check if object is a hashref
+- write tests ;)
