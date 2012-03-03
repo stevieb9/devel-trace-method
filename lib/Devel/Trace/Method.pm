@@ -3,7 +3,7 @@ package Devel::Trace::Method;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use Exporter 'import';
 
@@ -287,13 +287,18 @@ way.
 
 
 =head1 AUTHOR
+
 Steve Bertrand, E<lt>steveb@cpan.orgE<gt>
 
 
 
-=head1 COPYRIGHT AND LICENSE
+=head1 COPYRIGHT
 
 Copyright (C) 2012 by Steve Bertrand
+
+
+
+=head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.12.4 or,

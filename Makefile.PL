@@ -9,4 +9,11 @@ WriteMakefile(
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Devel/Trace/Method.pm', # retrieve abstract from module
        AUTHOR         => 'Steve Bertrand <steve@cpan.org>') : ()),
+
+    META_MERGE => {
+        resources => {
+            bugtracker  =>      'https://bitbucket.org/spek/devel-trace-method/issues',
+            repository  =>      'https://bitbucket.org/spek/devel-trace-method',
+        },
+    },
 );

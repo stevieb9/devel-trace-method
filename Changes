@@ -1,5 +1,12 @@
 Revision history for Perl extension Devel::Method::Matrix.
 
+0.08  2012-02-03
+    - fixed bug 4 and 5
+    - code tidying
+    - added Metadata to Makefile.Pl, so that CPAN will
+      properly use our bugtracker
+    - updated pod and wrote more tests
+
 0.05  2012-02-03
     - more POD cleanup
     - added test cases (still working on it)
