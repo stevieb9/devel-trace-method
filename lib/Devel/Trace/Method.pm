@@ -3,7 +3,7 @@ package Devel::Trace::Method;
 use strict;
 use warnings;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use Exporter 'import';
 
@@ -151,7 +151,7 @@ __END__
 
 =head1 NAME
 
-Devel::Trace::Method - Track how your object methods interact
+Devel::Trace::Method - Follow the flow of your object's method calls 
 
 
 
@@ -163,18 +163,18 @@ Devel::Trace::Method - Track how your object methods interact
                                 fetch_trace
                             );
 
-  # configure your object for method tracking
+  # configure your object for method tracking within your
+  # new() method
  
-  track_object_methods( $self ); # in your new() method
+  track_object_methods( $self ); 
 
-  # in each method call within your object, inform the method
-  # that you want it tracked
+  # add the tracking call within each of your methods
 
   track_method( $self );
   
   # retrieve the data  
     
-  my $all        = fetch_trace( $object ); # or $self
+  my $all        = fetch_trace( $obj ); # or $self
   my $codeflow   = fetch_trace( $obj, 'codeflow' );
   my $stacktrace = fetch_trace( $obj, 'stacktrace' );
 
@@ -182,8 +182,9 @@ Devel::Trace::Method - Track how your object methods interact
 =head1 DESCRIPTION
 
 This module takes any object, and injects into it the ability to
-have it track itself through all of its progress. As of now, it
-creates an ordered stack trace, and a list of ordered method calls.
+have it track its own method calls, and store this information for
+later retrieval. It creates and stores an ordered stack trace, 
+and a list of ordered method calls.
 
 NOTE: This is alpha software, and *will* go through API changes
 in the early stages.
@@ -235,6 +236,7 @@ Given no optional parameters, returns a hash reference that contains
 an array reference for each of the available data.
 
 
+
 =head1 EXAMPLES
 
     # print the stack trace
@@ -244,22 +246,23 @@ an array reference for each of the available data.
 
     $VAR1 = [
           {
+            'caller' => 0,
             'sub' => 'Dude::say_hi',
             'filename' => './dude.pl',
-            'caller' => 0,
             'line' => 26,
             'package' => 'Dude'
           },
           {
+            'caller' => 'Dude::say_hi',
             'sub' => 'Dude::say_bye',
             'filename' => './dude.pl',
-            'caller' => 'Dude::say_hi',
             'line' => 46,
             'package' => 'Dude'
           }
         ];
 
     # print the code flow
+
     my $codeflow = fetch_trace( $obj, 'codeflow' );
     print Dumper $codeflow;
 
