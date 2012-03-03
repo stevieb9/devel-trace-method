@@ -1,26 +1,69 @@
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl Devel-Method-Matrix.t'
-
-#########################
-
-# change 'tests => 1' to 'tests => last_test_to_print';
-
 use strict;
 use warnings;
+use Data::Dumper;
 
 use Test::More qw( no_plan );
-BEGIN { use_ok('Devel::Method::Matrix') };
+BEGIN { use_ok('Devel::Trace::Method') };
 
-use Devel::Method::Matrix qw( :all );
+# dummy package for testing
 
-#can_ok( 'Devel::Method::Matrix', 'configure_method_debug' );
-#can_ok( 'Devel::Method::Matrix', 'track_method' );
+package Class;
+
+use Devel::Trace::Method qw( :all );
+
+sub new { 
+    my $self = bless {}, 'Class'; 
+    trace_object_methods( $self ) unless shift;
+    return $self;
+}
+sub now { 
+    my $self = shift;
+    trace_method( $self );
+}
+sub then {
+    my $self = shift;
+    trace_method{ $self };
+}
+1;
+
+sub _nothing{} ### Tests
+
+package main;
+
+use Devel::Trace::Method qw( :all );
 
 {
+    my $obj = Class::new(1);
+    my $ret = track_object_methods( $obj );
+
+    ok ( $ret == 0, "track_object_method() returns 0 upon success" );
+
+    ok ( exists $obj->{ DTM_functions }, "object is populated with our container" );
+    ok ( exists $obj->{ DTM_functions }{ track }, "container has track" );
+    ok ( exists $obj->{ DTM_functions }{ fetch }, "container has fetch" );
+   
+    { # track subs
+
+        my $sub_count = 0;
+        my $track_subs = $obj->{ DTM_functions }{ track };
+        for my $sub ( keys %{ $track_subs } ){ 
+            $sub_count++;
+            ok ( ref $track_subs->{ $sub }  eq 'CODE', "sub $sub_count is actually a coderef" );
+        }
+        ok ( $sub_count == 2, "there are only two 'track' subs" );
+    }
+    { # fetch subs
+
+        my $sub_count = 0;
+        my $fetch_subs = $obj->{ DTM_functions }{ fetch };
+        for my $sub ( keys %{ $fetch_subs } ){ 
+            $sub_count++;
+            ok ( ref $fetch_subs->{ $sub }  eq 'CODE', "sub $sub_count is actually a coderef" );
+        }
+        ok ( $sub_count == 2, "there are only two 'fetch' subs" );
+    }
+
+    print Dumper $obj;
+
 
 }
-#########################
-
-# Insert your test code below, the Test::More module is use()ed here so read
-# its man page ( perldoc Test::More ) for help writing this test script.
-

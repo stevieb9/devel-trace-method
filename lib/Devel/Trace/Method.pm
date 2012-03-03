@@ -110,7 +110,7 @@ sub track_object_methods {
             = DEBUGGING_FUNCTIONS()->{ $function };
     }
 
-    return $self;   
+    return 0;   
 }
 
 sub track_method {
