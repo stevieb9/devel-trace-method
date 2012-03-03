@@ -1,6 +1,7 @@
 ^\.hg/
 ^\.hgignore$
 ^MANIFEST\.SKIP$
+^MANIFEST\.bak$
 ^examples/
 ~$
 tar.gz$

@@ -201,7 +201,7 @@ blessing your object, and prior to returning it.
 =head2 track_method( OBJ )
 
 This function appends tracking data to what is currently saved
-for each method call that calls this function.
+for each method that calls this function.
 
 Currently, this function call must be manually listed in each
 method you want to track. It should be entered in all of your
@@ -226,9 +226,8 @@ optional string parameter states which data you'd like returned:
     'stacktrace' -returns an arrayref of hash references, where
                   each hash ref contains details of each method call
 
-Given no optional parameters, returns a hash reference that contains 
-an array reference for each of the available data.
-
+Given no optional parameters, returns a hash reference that contains
+an array reference for each available data. 
 
 
 =head1 EXAMPLES

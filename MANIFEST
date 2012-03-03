@@ -2,8 +2,6 @@ Changes
 lib/Devel/Trace/Method.pm
 Makefile.PL
 MANIFEST
-MANIFEST.bak
 README
 t/01-Devel-Trace-Method.t
 t/02-bug5.t
-TODO
