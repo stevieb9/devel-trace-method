@@ -1,5 +1,9 @@
 Revision history for Perl extension Devel::Method::Matrix.
 
+0.04  2012-02-03
+    - cleaned up broken tabs
+    - fixed POD blocks of verbatim code
+
 0.03  2012-02-03
 	- renamed module to ::Trace::Method
 	- renamed the hash key names that are stuffed into
