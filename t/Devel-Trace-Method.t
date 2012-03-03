@@ -16,13 +16,14 @@ sub new {
     track_object_methods( $self ) unless shift;
     return $self;
 }
-sub now { 
+sub trace_ret { 
     my $self = shift;
-    trace_method( $self );
+    my $trace_ret = track_method( $self );
+    return $trace_ret;
 }
 sub then {
     my $self = shift;
-    trace_method{ $self };
+    track_method( $self );
 }
 1;
 
@@ -35,6 +36,7 @@ use Devel::Trace::Method qw( :all );
 {
     my $obj = Class::new(1);
     my $ret = track_object_methods( $obj );
+    my $obj = $ret;
 
     ok ( ref $ret eq 'Class', "track_object_method() returns an object" );
 
@@ -63,4 +65,30 @@ use Devel::Trace::Method qw( :all );
         ok ( $sub_count == 2, "there are only two 'fetch' subs" );
     }
 
-}
+    { # track_method() return
+        my $track_method_return = $obj->trace_ret();
+        is ( $track_method_return, 0, "success in track_method_return() returns 0" );
+    }
+
+} ### end test block 1
+
+{ ### Test block 2 (basic function return testing)
+
+    my $obj = Class::new();
+    $obj->trace_ret();
+    $obj->then();
+
+    { # fetch_trace
+
+        # all of the data
+
+        my $all = fetch_trace( $obj );
+        ok ( ref $all eq 'HASH', "given no params, fetch_trace() returns an href at the top level" );
+
+        for my $data ( keys %$all ){
+            ok ( ref $all->{ $data } eq 'ARRAY', "element in fetch_trace() array with no args is an arrayref" );
+        }
+    }
+
+} 
+

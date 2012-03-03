@@ -54,7 +54,7 @@ my @fetch_functions = qw(
             foreach my $key (sort { ($a) <=> ($b) } keys %$codeflow_storage) {
                 push @sorted_codeflow, "$key => $codeflow_storage->{$key}";
             }
-            return @sorted_codeflow;
+            return \@sorted_codeflow;
         }
         $debugging_functions->{codeflow} = \&codeflow;
     }
@@ -83,7 +83,7 @@ my @fetch_functions = qw(
 
         sub stacktrace {
             my $self = shift;
-            return @stack;
+            return \@stack;
         }
         $debugging_functions->{stacktrace} = \&stacktrace;
     }
@@ -130,11 +130,11 @@ sub fetch_trace {
     my $param = shift;
 
     if ( ! $param ){
-        my @return;
+        my $return_href;
         for my $data ( @fetch_functions ){
-            push @return, \$self->{ DTM_functions }{ fetch }{ $data }();
+            $return_href->{ $data } = $self->{ DTM_functions }{ fetch }{ $data }();
         }
-        return @return;
+        return $return_href;
     }   
     return $self->{ DTM_functions }{ fetch }{ $param }();
 }
@@ -169,9 +169,9 @@ Devel::Trace::Method - Track how your object methods interact
   
   # retrieve the data  
     
-  my @all        = fetch_trace( $object ); # or $self
-  my @codeflow   = fetch_trace( $obj, 'codeflow' );
-  my @stacktrace = fetch_trace( $obj, 'stacktrace' );
+  my $all        = fetch_trace( $object ); # or $self
+  my $codeflow   = fetch_trace( $obj, 'codeflow' );
+  my $stacktrace = fetch_trace( $obj, 'stacktrace' );
 
 
 =head1 DESCRIPTION
@@ -221,23 +221,22 @@ methods, or by a program using one of your methods.
 Takes an object as the first mandatory parameter. The second
 optional string parameter states which data you'd like returned:
 
-    'codeflow'   -returns an array containing the list of methods
+    'codeflow'   -returns an arrayref containing the list of methods
                   called, in the order they were called.
 
-    'stacktrace' -returns an array of hash references, where
+    'stacktrace' -returns an arrayref of hash references, where
                   each hash ref contains details of each method call
 
-Given no optional parameters, the return is an array reference
-that contains an array reference for all the above types.
-
+Given no optional parameters, returns a hash reference that contains 
+an array reference for each of the available data.
 
 
 =head1 EXAMPLES
 
     # print the stack trace
 
-    my @stack = fetch_trace( $obj, 'stacktrace' );
-    print Dumper \@stack;
+    my $stack = fetch_trace( $obj, 'stacktrace' );
+    print Dumper $stack;
 
     $VAR1 = [
           {
@@ -257,8 +256,8 @@ that contains an array reference for all the above types.
         ];
 
     # print the code flow
-    my @codeflow = fetch_trace( $obj, 'codeflow' );
-    print Dumper \@codeflow;
+    my $codeflow = fetch_trace( $obj, 'codeflow' );
+    print Dumper $codeflow;
 
     $VAR1 = [
           '0 => Dude::say_hi',
